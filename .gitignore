@@ -1,0 +1,9 @@
+db.sqlite3
+venv/
+media/
+__pycache__/
+app/static/
+core/.env
+notas.txt
+servicios.json
+create_services.py

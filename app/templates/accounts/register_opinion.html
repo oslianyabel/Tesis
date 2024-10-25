@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #1a2d3f;
+        }
+
+        .container {
+            margin-top: 100px;
+            max-width: 400px;
+            background-color: #2f4d6e;
+            padding: 30px;
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #4567b7;
+            border-color: #4567b7;
+        }
+
+        @font-face {
+            font-family: Ubuntu;
+            src: url(../static/app/fonts/ubuntu/Ubuntu-Regular.ttf)
+        }
+          
+        @font-face {
+            font-family: ADLaM Display;
+            src: url(../static/app/fonts/ADLaM_Display/ADLaMDisplay-Regular.ttf)
+        }
+    
+        body {
+            font-family: ADLaM Display, Ubuntu !important;
+            font-weight: 400;
+        }
+    </style>
+    <title>Registro</title>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center" style="margin-bottom: 30px">Regístrate</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="color: red;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Usuario</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password1" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirmar Contraseña</label>
+                <input type="password" class="form-control" id="confirm_password" name="password2" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-block">Registrarse <i class="fa fa-user-plus"></i></button>
+            </div>
+        </form>
+        
+        <div class="text-center" style="margin-top: 15px;">
+            <p style="font-size: small;">¿Ya tienes una cuenta? <a href="{% url 'login_opinion' service_id %}">Inicia sesión aquí <i class="fas fa-sign-in-alt"></i></a></p>
+        </div>
+    </div>
+</body>
+</html>

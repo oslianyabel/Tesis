@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+  {% load static %}
+  <link href="{% static 'app/css/servicios2.css' %}" rel="stylesheet">
+{% endblock extra_styles %}
+
+{% block logo %}
+  <link href={{catalogo.logo.url}} rel="icon">
+  <link href={{catalogo.logo.url}} rel="apple-touch-icon">
+{% endblock logo %}
+
+{% block nav_items %}
+  <li><a class="nav-link scrollto" href="{% url 'index' %}">Portada</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 1 %}">Software como Servicio</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 2 %}">Capacitación</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 3 %}">Software como Producto</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 0 %}">Todos</a></li>
+{% endblock nav_items %}
+
+{% block content %}
+<section id="services" class="services">
+  <div class="container" data-aos="fade-up">
+    <div class="row">
+      {% for servicio in servicios %}
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch tarjeta">
+        <div class="card">
+          <div class="card-header">
+            <h4>{{ servicio.nombre }} <div class="icon" style="display: inline; float: right;"><i class="{{servicio.categoria.clase}}"></i></div></h4>
+            <span class="badge bg-primary">{{ servicio.categoria.abreviatura }}</span>
+          </div>
+          <div class="card-body">
+            {% if servicio.imagen %}
+            <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" class="img-fluid" data-aos="zoom-in" data-aos-delay="200">
+            {% endif %}
+            <p>{{ servicio.descripcion|truncatechars:100 }}</p>
+            <div class="button-container">
+              <button style="font-size: small;" class="btn btn-info" onclick="window.location.href='{% url 'servicio-detail' servicio.id %}'">Ver más <i class="fa fa-info-circle"></i></button>
+              <button style="font-size: small;" class="btn btn-dark" onclick="window.location.href='{% url 'chatbot_service' servicio.id %}'">Solicitar <img src="{% static 'app/svg/robot-wink-fill.svg' %}" width="20" height="20" alt="Review" style="filter: invert(100%);"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p>No hay servicios disponibles en este momento :(</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block links %}
+
+  <div class="col-lg-3 col-md-6 footer-contact">
+    <h3><i class="fa fa-building"></i> SOLUCIONES DTEAM</h3>
+    <p>
+      {{contacto.direccion}} <br><br>
+      <strong><i class="fa fa-mobile"></i> Teléfono móvil:</strong> {{contacto.telefono_movil}}<br>
+      <strong><i class="fa fa-phone"></i> Teléfono fijo:</strong> {{contacto.telefono_fijo}}<br>
+      <strong><i class="fa fa-envelope"></i> Email:</strong> {{contacto.correo}}<br>
+    </p>
+  </div>
+
+  <div class="col-lg-3 col-md-6 footer-links">
+    <h4>Enlaces Externos <i class="fa fa-external-link"></i></h4>
+    <ul>
+    {% for link in contacto.links_de_ayuda.all %}  
+      <li><a href={{link.link}}>{{link.nombre}}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+
+  <div class="col-lg-3 col-md-6 footer-links">
+    <h4>Redes Sociales <i class="fa fa-link"></i></h4>
+    <div class="social-links mt-3">
+    {% for red in contacto.redes_sociales.all %}
+      <a href={{red.link}} class="{{red.clase}}"><i class="bx bxl-{{red.clase}}"></i></a>
+    {% endfor %}
+    </div>
+  </div>
+
+{% endblock links %}

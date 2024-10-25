@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+
+{% block logo %}
+{% load static %}
+  <link href={{catalogo.logo.url}} rel="icon">
+  <link href={{catalogo.logo.url}} rel="apple-touch-icon">
+{% endblock logo %}
+
+{% block nav_items %}
+<li><a class="nav-link scrollto" href="#services">Servicios <i class="fas fa-tools"></i></a></li>
+<li><a class="nav-link scrollto" href="#portfolio">Muestras <i class="fas fa-images"></i></a></li>
+<li><a class="nav-link scrollto" href="#team">Personal <i class="fas fa-users"></i></a></li>
+<li class="dropdown"><a href="javascript:void(0);">Enlaces externos <i class="bi bi-chevron-down"></i></a>
+  <ul>
+    <li><a href="http://www.geic.cu/" target="_blank">GEIC</a></li>
+    <li><a href="https://www.uic.cu/" target="_blank">Union de informáticos de Cuba</a></li>
+    <li><a href="https://www.mincom.gob.cu/" target="_blank">Ministerio de comunicaciones</a></li>
+    <li><a href="https://www.entumovil.cu/" target="_blank">entuMovil</a></li>
+    <li><a href="https://www.desoft.cu/es" target="_blank">Desoft Nacional</a></li>
+  </ul>
+</li>
+<li><a class="nav-link scrollto" href="#contact">Ubicación <i class="fas fa-map-marker-alt"></i></a></li>
+<li><a class="nav-link scrollto" href="{% url 'chatbot' %}">ChatBot <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M22.078 8.347a1.368 1.368 0 0 0-.488-.325V4.647a.717.717 0 1 0-1.434 0V7.85h-.21a5.479 5.479 0 0 0-5.25-3.92H9.427a5.48 5.48 0 0 0-5.25 3.92H3.9V4.647a.717.717 0 1 0-1.434 0v3.385a1.501 1.501 0 0 0-.469.315A1.722 1.722 0 0 0 1.5 9.552v4.896a1.702 1.702 0 0 0 1.702 1.702h.956a5.48 5.48 0 0 0 5.25 3.92h5.183a5.48 5.48 0 0 0 5.25-3.92h.955a1.702 1.702 0 0 0 1.702-1.702V9.552c.02-.44-.131-.872-.42-1.205M3.996 14.716H3.24a.267.267 0 0 1-.191-.077a.287.287 0 0 1-.076-.191V9.552a.258.258 0 0 1 .248-.268h.775a.545.545 0 0 0 0 .125v5.182a.545.545 0 0 0 0 .125m4.312-2.869v-1.96a.813.813 0 1 1 1.616 0v1.96a.813.813 0 1 1-1.616 0m6.283 3.662a3.605 3.605 0 0 1-5.068 0a.813.813 0 0 1 .885-1.326a.804.804 0 0 1 .262.179a2.017 2.017 0 0 0 2.773 0a.804.804 0 0 1 1.148 0a.813.813 0 0 1 0 1.157zm1.367-3.69h-1.913a.812.812 0 0 1-.574-1.385a.803.803 0 0 1 .574-.232h1.913a.805.805 0 0 1 .754 1.117a.812.812 0 0 1-.754.509zm5.182 2.62a.287.287 0 0 1-.076.19a.267.267 0 0 1-.191.077h-.756a.55.55 0 0 0 0-.124V9.37a.55.55 0 0 0 0-.124h.765a.248.248 0 0 1 .182.077c.048.052.076.12.076.19z"/></svg></a></li>
+{% endblock nav_items %}
+
+{% block content %}
+<!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+          <h1>Creamos soluciones informáticas</h1>
+          <h2>Nos ajustamos a las necesidades de cada empresa</h2>
+          <div class="d-flex justify-content-center justify-content-lg-start">
+            <a href="{% url 'chatbot' %}" class="btn-get-started scrollto">Solicítanos!</a>
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
+          <img src={{catalogo.hero.url}} class="img-fluid animated" alt="">
+        </div>
+      </div>
+    </div>
+
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Us Section ======= -->
+    <section id="about" class="about">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>¿Quiénes Somos?</h2>
+        </div>
+
+        <div class="row content">
+          <div class="col-lg-6">
+            <p style="text-align: justify;">
+              {{ sobre_nosotros.parrafo }}
+              <ul>
+                <li><i class="ri-check-double-line"></i> {{ sobre_nosotros.check1 }} </li>
+                <li><i class="ri-check-double-line"></i> {{ sobre_nosotros.check2 }} </li>
+                <li><i class="ri-check-double-line"></i> {{ sobre_nosotros.check3 }} </li>
+              </ul>
+            </p>
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0">
+            <p style="text-align: justify;">
+              {{ sobre_nosotros.parrafo2 }}
+            </p>
+            <a href={{ sobre_nosotros.documento.url }} class="btn-learn-more" download="SOLUCIONES_DTEAM.doc">Ver Más</a>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Us Section -->
+
+    <!-- ======= Why Us Section ======= -->
+    <section id="why-us" class="why-us section-bg">
+      <div class="container-fluid" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
+
+            <div class="content">
+              <h3>¿Por qué elegirnos?</h3>
+              <p>
+                Contamos con módulos de seguridad informática, gestión estratégica, administración de economía y finanzas, capital humano, gestión de información y gestión integral.
+              </p>
+            </div>
+
+            <div class="accordion-list">
+              <ul>
+              {% for pot in potencialidades %}
+                <li>
+                  <a data-bs-toggle="collapse" class="collapsed" data-bs-target="#accordion-list-{{forloop.counter}}"><span>0{{forloop.counter}}</span> {{pot.nombre}} <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="accordion-list-{{forloop.counter}}" class="collapse" data-bs-parent=".accordion-list">
+                    <p>
+                      {{pot.descripcion}}
+                    </p>
+                  </div>
+                </li>
+               {% endfor %} 
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img" style='background-image: url({{catalogo.why_us.url}});' data-aos="zoom-in" data-aos-delay="150">&nbsp;</div>
+
+        </div>
+
+      </div>
+    </section><!-- End Why Us Section -->
+
+    <!-- ======= Skills Section ======= -->
+    <section id="skills" class="skills">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+          <div class="col-lg-6 d-flex align-items-center" data-aos="fade-right" data-aos-delay="100">
+            <img src={{catalogo.skills.url}} class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
+            <h3>Profesionales con años de experiencia a su disposición.</h3>
+            <p class="fst-italic">Mantenemos capacitado a nuestro equipo con las nuevas tecnologías.</p>
+
+            <div class="skills-content">
+            {% for skill in skills %}
+              <div class="progress">
+                <span class="skill">{{skill.nombre}} <i class="val">{{skill.porcentaje}}%</i></span>
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar" role="progressbar" aria-valuenow={{skill.porcentaje}} aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            {% endfor %}
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Skills Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Servicios</h2>
+          <p>Le brindamos la posibilidad de cubrir las necesidades organizativas de su empresa y obtener mejores resultados a través de una gestión más eficiente y precisa.</p>
+        </div>
+
+        <div class="row">
+        {% for cat in categorias %}
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 d-flex align-items-stretch mb-3" data-aos="zoom-in" data-aos-delay="100">
+          <div class="icon-box">
+            <h4><a href="{% url 'servicios' cat.id %}"><div class="icon" style="display: inline;"><i class="{{cat.clase}}"></i></div> {{cat.nombre}}</a></h4>
+            <p>{{cat.descripcion}}</p>
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Cta Section ======= -->
+    <section id="cta" class="cta" style="background-image: linear-gradient(rgba(41, 62, 97, 0.9), rgba(41, 62, 97, 0.9)), url({{catalogo.action.url}}); background-size: cover; background-position: center;">
+      <div class="container" data-aos="zoom-in">
+        
+        <div class="row">
+          <div class="col-lg-9 text-center text-lg-start">
+            <h3>Asistente Virtual</h3>
+            <p>Inicie una conversación con nuestro asistente virtual y haga cualquier pregunta o solicite algún servicio!</p>
+          </div>
+          <div class="col-lg-3 cta-btn-container text-center">
+            <a class="cta-btn align-middle" href="{% url 'chatbot' %}">Iniciar Chat</a>
+          </div>
+        </div>
+        
+      </div>
+    </section><!-- End Cta Section -->
+
+    <!-- ======= Portfolio Section ======= -->
+    <section id="portfolio" class="portfolio">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Muestras de lo que hacemos</h2>
+          <p>Algunos ejemplos de servicios de nuestra cartera.</p>
+        </div>
+
+        <ul id="portfolio-flters" class="d-flex justify-content-center flex-wrap" data-aos="fade-up" data-aos-delay="100">
+          <li data-filter="*" class="filter-active d-block d-md-inline-block">Todos</li>
+          {% for cat in categorias %}
+          <li data-filter=".filter-{{cat.abreviatura}}" class="d-block d-md-inline-block">{{cat.abreviatura}}</li>
+          {% endfor %}
+        </ul>
+
+        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+        {% for ej in ejemplos %}
+          <div class="col-lg-4 col-md-6 portfolio-item filter-{{ej.categoria.abreviatura}}">
+            <div class="portfolio-img">
+              <a href="{% url 'servicio-detail' ej.id %}">
+                  <img src="{{ ej.imagen.url }}" class="img-fluid" alt="">
+              </a>
+            </div>
+            <div class="portfolio-info">
+              <h4>{{ej.nombre}}</h4>
+              <p>{{ej.categoria}}</p>
+              <a href={{ ej.imagen.url }} data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Imagen Ampliada"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+
+      </div>
+    </section><!-- End Portfolio Section -->
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Conoce parte de nuestro equipo</h2>
+          <p>Fotografías tomadas en eventos profesionales donde intervinieron uno o varios miembros de nuestra plantilla.</p>
+        </div>
+
+        <div class="row">
+        {% for t in team %}
+          <div class="col-lg-6 mt-4">
+            <div class="member d-flex align-items-start" data-aos="zoom-in" data-aos-delay="100">
+              <div class="pic"><img src={{t.imagen.url}} class="img-fluid" alt={{t.evento}}></div>
+              <div class="member-info">
+                <h4>{{t.nombre}}{% if t.apellido %} {{t.apellido}} {% endif %}</h4>
+                {% if t.cargo %}<span>{{t.cargo}}</span>{% endif %}
+                <span>{{t.evento}}</span>
+                <p>{{t.fecha}}</p>
+                <div class="social">
+                  <div style="padding-right: 10px;">Fuente:</div>
+                  <a href={{t.link}}><i class="ri-{{t.fuente|lower}}-fill"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+
+      </div>
+    </section><!-- End Team Section -->
+
+    <!-- ======= Frequently Asked Questions Section ======= -->
+    <section id="faq" class="faq section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Preguntas Frecuentes</h2>
+        </div>
+
+        <div class="faq-list">
+          <ul>
+          {% for p in preguntas %}  
+            <li data-aos="fade-up" data-aos-delay="100">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapsed" data-bs-target="#faq-list-{{forloop.counter}}">{{p.pregunta}}<i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-{{forloop.counter}}" class="collapse" data-bs-parent=".faq-list">
+                <p style="text-align: justify;">
+                  {{p.respuesta}}
+                </p>
+              </div>
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+
+      </div>
+    </section><!-- End Frequently Asked Questions Section -->
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>¿Donde encontrarnos?</h2>
+        </div>
+
+        <div class="row">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d925.272993958714!2d-79.4449619!3d21.9310153!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f2aa1eaa626a211%3A0x76e5b3fbf3a2b38a!2sDesoft%20Divis%C3%B3n%20Sancti%20Sp%C3%ADritus!5e0!3m2!1ses!2sus!4v1727564371855!5m2!1ses!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock content %}
+
+{% block links %}
+
+  <div class="col-lg-3 col-md-6 footer-contact">
+    <h3><i class="fa fa-building"></i> SOLUCIONES DTEAM</h3>
+    <p>
+      {{contacto.direccion}} <br><br>
+      <strong><i class="fa fa-mobile"></i> Teléfono móvil:</strong> {{contacto.telefono_movil}}<br>
+      <strong><i class="fa fa-phone"></i> Teléfono fijo:</strong> {{contacto.telefono_fijo}}<br>
+      <strong><i class="fa fa-envelope"></i> Email:</strong> {{contacto.correo}}<br>
+    </p>
+  </div>
+
+  <div class="col-lg-3 col-md-6 footer-links">
+    <h4>Enlaces Externos <i class="fa fa-external-link"></i></h4>
+    <ul>
+    {% for link in contacto.links_de_ayuda.all %}  
+      <li><a href={{link.link}} target="_blank">{{link.nombre}}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+
+  <div class="col-lg-3 col-md-6 footer-links">
+    <h4>Redes Sociales <i class="fa fa-link"></i></h4>
+    <p>Síguenos en nuestras redes sociales para no perderte ni un detalle ;)</p>
+    <div class="social-links mt-3">
+    {% for red in contacto.redes_sociales.all %}
+      <a href={{red.link}} target="_blank" class="{{red.clase}}"><i class="bx bxl-{{red.clase}}"></i></a>
+    {% endfor %}
+    </div>
+  </div>
+
+{% endblock links %}

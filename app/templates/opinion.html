@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block extra_styles %}
+  {% load static %}
+  <link href="{% static 'app/css/opinion.css' %}" rel="stylesheet">
+{% endblock extra_styles %}
+
+{% block logo %}
+  <link href={{catalogo.logo.url}} rel="icon">
+  <link href={{catalogo.logo.url}} rel="apple-touch-icon">
+{% endblock logo %}
+
+{% block nav_items %}
+  <li><a class="nav-link scrollto" href="{% url 'index' %}">Portada</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 1 %}">Software como Servicio</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 2 %}">Capacitación</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 3 %}">Software como Producto</a></li>
+{% endblock nav_items %}
+
+{% block content %}
+  <main id="main">
+    <section id="leave-comment" class="leave-comment col-12 col-sm-9 col-md-9 col-lg-6 mx-auto">
+      <div class="container">
+        <h2>¿Que te pareció el servicio: {{ servicio.nombre }}?</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="color: red;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="comentario">Comentario:</label>
+            <textarea class="form-control" id="comentario" name="comentario" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="puntuacion">Puntuación:</label>
+            <select class="form-control" id="puntuacion" name="puntuacion" required>
+              {% for i in range_5_1 %}
+                <option value="{{i}}">
+                  {% for _ in range_1_5 %}
+                    {% if forloop.counter <= i %}
+                      <span>★</span>
+                    {% endif %}
+                  {% endfor %}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-around">
+            <button type="submit" class="btn btn-primary mt-3">Enviar <i class="fas fa-paper-plane"></i></button>
+            <a href="{% url 'servicio-detail' service_id %}" class="btn btn-secondary mt-3">Cancelar <i class="fas fa-times"></i></a>
+          </div>
+        </form>
+      
+      </div>
+    </section>
+  </main>
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+{% endblock %}
+
+{% block links %}
+
+  <div class="col-lg-3 col-md-6 footer-contact">
+    <h3><i class="fa fa-building"></i> SOLUCIONES DTEAM</h3>
+    <p>
+      {{contacto.direccion}} <br><br>
+      <strong><i class="fa fa-mobile"></i> Teléfono móvil:</strong> {{contacto.telefono_movil}}<br>
+      <strong><i class="fa fa-phone"></i> Teléfono fijo:</strong> {{contacto.telefono_fijo}}<br>
+      <strong><i class="fa fa-envelope"></i> Email:</strong> {{contacto.correo}}<br>
+    </p>
+  </div>
+
+  <div class="col-lg-3 col-md-6 footer-links">
+    <h4>Enlaces Externos <i class="fa fa-external-link"></i></h4>
+    <ul>
+    {% for link in contacto.links_de_ayuda.all %}  
+      <li><a href={{link.link}}>{{link.nombre}}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+
+  <div class="col-lg-3 col-md-6 footer-links">
+    <h4>Redes Sociales <i class="fa fa-link"></i></h4>
+    <div class="social-links mt-3">
+    {% for red in contacto.redes_sociales.all %}
+      <a href={{red.link}} class="{{red.clase}}"><i class="bx bxl-{{red.clase}}"></i></a>
+    {% endfor %}
+    </div>
+  </div>
+
+{% endblock links %}

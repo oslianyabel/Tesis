@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'app/css/chatbot4.css' %}">
+  <link rel="stylesheet" href="{% static 'app/font-awesome/css/all.css' %}">
+  <link href={{catalogo.logo.url}} rel="icon">
+  <link href={{catalogo.logo.url}} rel="apple-touch-icon">
+  <title>ChatBot</title>
+  <style>
+    @font-face {
+      font-family: Ubuntu;
+      src: url(../static/app/fonts/ubuntu/Ubuntu-Regular.ttf)
+    }
+    
+    @font-face {
+      font-family: ADLaM Display;
+      src: url(../static/app/fonts/ADLaM_Display/ADLaMDisplay-Regular.ttf)
+    }
+
+    #chat-messages {
+      background-image: url({{catalogo.fondo_chatbot.url}}) !important;
+    }
+  </style>
+</head>
+<body>
+  <audio id="message-sound" src="{% static 'app/sounds/mensaje.mp3' %}" preload="auto"></audio>
+  <div id="chat-container" class="col-12 col-sm-6">
+    <div id="chat-header">
+      <a href="javascript:history.back()" id="back"><i class="fas fa-arrow-left"></i></a>
+      <img src="{% static 'app/svg/robot-wink-fill.svg' %}" width="40" height="40" alt="Review" style="filter: invert(100%);">
+      <span id="nombre-usuario">Asistente Virtual</span>
+      <span id="estado-usuario">Escribiendo...</span>
+      <div id="login-container" style="margin-left: auto;">
+        <button class="btn" id="clean-chat"><i class="fas fa-trash-alt"></i></button>
+        <a href={% url 'login_chatbot' %} id="login-button" class=""><i class="fas fa-user-circle"></i></a>
+      </div>
+    </div>
+    
+    <div id="chat-messages">
+      {% if mensajes %}
+        {% for m in mensajes %}
+          {% if m.enviado_por == "assistant" %}
+          <div class="mb-0 bot-sms"> {{m.texto}} <small> {{m.fecha_envio}} </small></div>
+          {% endif %}
+          
+          {% if m.enviado_por == "user" %}
+          <div class="mb-0 user-sms"> {{m.texto}} <small> {{m.fecha_envio}} </small></div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <form id="chat-form">
+      <input type="text" id="msg" class="form-control" placeholder="Escribe un mensaje..." value="{% if servicio %}Quiero solicitar el servicio: {{ servicio.nombre }}{% endif %}">
+      <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+    </form>
+
+    <div id="quick-replies" class="d-flex justify-content-around mt-2">
+      <button class="btn btn-secondary quick-reply" id="cuestionario">Cuestionario <i class="fas fa-download"></i></button>
+      <button class="btn btn-secondary quick-reply" id="servicio">Solicitar Servicio <i class="fas fa-concierge-bell"></i></button>
+      <button class="btn btn-secondary quick-reply" id="generales">Aportar Generales <i class="fas fa-file-signature"></i></button>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    const estadoUsuario = document.getElementById('estado-usuario');
+    let estado_usuario_text = "Escribiendo"
+
+    let puntos = 0;
+    setInterval(() => {
+      puntos++;
+      if (puntos > 3) {
+        puntos = 0;
+      }
+      estadoUsuario.textContent = `${estado_usuario_text}${'.'.repeat(puntos)}`;
+    }, 500);
+
+    $(document).ready(function(){
+      $('#chat-form').submit(function(e){
+        var ahora = new Date();
+        var hora = ahora.getHours();
+        var minutos = ahora.getMinutes();
+        var segundos = ahora.getSeconds();
+        var ampm = hora >= 12 ? 'PM' : 'AM';
+        hora = hora % 12;
+        hora = hora ? hora : 12;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+        segundos = segundos < 10 ? '0' + segundos : segundos;
+        var strHora = hora + ':' + minutos + ':' + segundos + ' ' + ampm;
+
+        estadoUsuario.style.visibility = 'visible';
+        e.preventDefault();
+        var msg = $('#msg').val();
+        $('#chat-messages').append('<div class="mb-0 user-sms">' + msg + '<small>' + strHora + '</small></div>');
+        $("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+        $('#msg').val('');
+        $.ajax({
+            url: "{% url 'chatbot' %}",
+            method: 'POST',
+            data: {Body: msg},
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function(response){
+              if (response.status === 'success') {
+                document.getElementById('message-sound').play();
+                estadoUsuario.style.visibility = 'hidden';
+                $('#chat-messages').append('<div class="mb-0 bot-sms">' + response.text + '<small>' + 
+                response.time + '</small></div>');
+                $("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+              } else {
+                estadoUsuario.style.visibility = 'hidden';
+                alert('Error: ' + response.error);
+              }
+            },
+            error: function(xhr, status, error){
+              estadoUsuario.style.visibility = 'hidden';
+              console.error(error);
+              alert('Error al enviar el mensaje');
+            }
+        });
+      });
+
+      $('#clean-chat').click(function(e){
+        var ahora = new Date();
+        var hora = ahora.getHours();
+        var minutos = ahora.getMinutes();
+        var segundos = ahora.getSeconds();
+        var ampm = hora >= 12 ? 'PM' : 'AM';
+        hora = hora % 12;
+        hora = hora ? hora : 12;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+        segundos = segundos < 10 ? '0' + segundos : segundos;
+        var strHora = hora + ':' + minutos + ':' + segundos + ' ' + ampm;
+
+        estado_usuario_text = "Limpiando Chat 🧹";
+        estadoUsuario.textContent = "Limpiando Chat 🧹";
+        estadoUsuario.style.visibility = 'visible';
+        e.preventDefault();
+        $.ajax({
+            url: "{% url 'chatbot' %}",
+            method: 'POST',
+            data: {Body: "Limpia el chat"},
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function(response){
+              if (response.status === 'success') {
+                document.getElementById('message-sound').play();
+                estadoUsuario.style.visibility = 'hidden';
+                estado_usuario_text = "Escribiendo";
+                $('#chat-messages').append('<div class="mb-0 bot-sms">' + response.text + '<small>' + 
+                response.time + '</small></div>');
+                $("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+              } else {
+                estadoUsuario.style.visibility = 'hidden';
+                estado_usuario_text = "Escribiendo";
+                alert('Error: ' + response.error);
+              }
+            },
+            error: function(xhr, status, error){
+              estadoUsuario.style.visibility = 'hidden';
+              estado_usuario_text = "Escribiendo";
+              console.error(error);
+              alert('Error al enviar el mensaje');
+            }
+        });
+      });
+
+      $('#cuestionario').click(function(e){
+        var ahora = new Date();
+        var hora = ahora.getHours();
+        var minutos = ahora.getMinutes();
+        var segundos = ahora.getSeconds();
+        var ampm = hora >= 12 ? 'PM' : 'AM';
+        hora = hora % 12;
+        hora = hora ? hora : 12;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+        segundos = segundos < 10 ? '0' + segundos : segundos;
+        var strHora = hora + ':' + minutos + ':' + segundos + ' ' + ampm;
+
+        estado_usuario_text = "Buscando Cuestionarios";
+        estadoUsuario.textContent = "Buscando Cuestionarios";
+        estadoUsuario.style.visibility = 'visible';
+        e.preventDefault();
+        $.ajax({
+            url: "{% url 'chatbot' %}",
+            method: 'POST',
+            data: {Body: "Quiero descargar un modelo de cuestionario."},
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function(response){
+              if (response.status === 'success') {
+                document.getElementById('message-sound').play();
+                estadoUsuario.style.visibility = 'hidden';
+                estado_usuario_text = "Escribiendo";
+                $('#chat-messages').append('<div class="mb-0 bot-sms">' + response.text + '<small>' + 
+                response.time + '</small></div>');
+                $("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+              } else {
+                estadoUsuario.style.visibility = 'hidden';
+                estado_usuario_text = "Escribiendo";
+                alert('Error: ' + response.error);
+              }
+            },
+            error: function(xhr, status, error){
+              estadoUsuario.style.visibility = 'hidden';
+              estado_usuario_text = "Escribiendo";
+              console.error(error);
+              alert('Error al enviar el mensaje');
+            }
+        });
+      });
+
+      $('#servicio').click(function(e){
+        var ahora = new Date();
+        var hora = ahora.getHours();
+        var minutos = ahora.getMinutes();
+        var segundos = ahora.getSeconds();
+        var ampm = hora >= 12 ? 'PM' : 'AM';
+        hora = hora % 12;
+        hora = hora ? hora : 12;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+        segundos = segundos < 10 ? '0' + segundos : segundos;
+        var strHora = hora + ':' + minutos + ':' + segundos + ' ' + ampm;
+
+        estado_usuario_text = "Procesando Solicitud";
+        estadoUsuario.textContent = "Procesando Solicitud";
+        estadoUsuario.style.visibility = 'visible';
+        e.preventDefault();
+        $.ajax({
+            url: "{% url 'chatbot' %}",
+            method: 'POST',
+            data: {Body: "Quiero iniciar una solicitud de contrato de un servicio."},
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function(response){
+              if (response.status === 'success') {
+                document.getElementById('message-sound').play();
+                estadoUsuario.style.visibility = 'hidden';
+                estado_usuario_text = "Escribiendo";
+                $('#chat-messages').append('<div class="mb-0 bot-sms">' + response.text + '<small>' + 
+                response.time + '</small></div>');
+                $("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+              } else {
+                estadoUsuario.style.visibility = 'hidden';
+                estado_usuario_text = "Escribiendo";
+                alert('Error: ' + response.error);
+              }
+            },
+            error: function(xhr, status, error){
+              estadoUsuario.style.visibility = 'hidden';
+              estado_usuario_text = "Escribiendo";
+              console.error(error);
+              alert('Error al enviar el mensaje');
+            }
+        });
+      });
+
+      $('#generales').click(function(e){
+        var ahora = new Date();
+        var hora = ahora.getHours();
+        var minutos = ahora.getMinutes();
+        var segundos = ahora.getSeconds();
+        var ampm = hora >= 12 ? 'PM' : 'AM';
+        hora = hora % 12;
+        hora = hora ? hora : 12;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+        segundos = segundos < 10 ? '0' + segundos : segundos;
+        var strHora = hora + ':' + minutos + ':' + segundos + ' ' + ampm;
+
+        estado_usuario_text = "Procesando Solicitud";
+        estadoUsuario.textContent = "Procesando Solicitud";
+        estadoUsuario.style.visibility = 'visible';
+        e.preventDefault();
+        $.ajax({
+            url: "{% url 'chatbot' %}",
+            method: 'POST',
+            data: {Body: "Quiero aportar mis generales."},
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            success: function(response){
+              if (response.status === 'success') {
+                document.getElementById('message-sound').play();
+                estadoUsuario.style.visibility = 'hidden';
+                estado_usuario_text = "Escribiendo";
+                $('#chat-messages').append('<div class="mb-0 bot-sms">' + response.text + '<small>' + 
+                response.time + '</small></div>');
+                $("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+              } else {
+                estadoUsuario.style.visibility = 'hidden';
+                estado_usuario_text = "Escribiendo";
+                alert('Error: ' + response.error);
+              }
+            },
+            error: function(xhr, status, error){
+              estadoUsuario.style.visibility = 'hidden';
+              estado_usuario_text = "Escribiendo";
+              console.error(error);
+              alert('Error al enviar el mensaje');
+            }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

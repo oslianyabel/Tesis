@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block extra_styles %}
+  {% load static %}
+  <link href="{% static 'app/css/servicio-detail.css' %}" rel="stylesheet">
+{% endblock extra_styles %}
+
+{% block logo %}
+  <link href={{catalogo.logo.url}} rel="icon">
+  <link href={{catalogo.logo.url}} rel="apple-touch-icon">
+{% endblock logo %}
+
+{% block nav_items %}
+  <li><a class="nav-link scrollto" href="{% url 'index' %}">Portada</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 1 %}">Software como Servicio</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 2 %}">Capacitación</a></li>
+  <li><a class="nav-link scrollto" href="{% url 'servicios' 3 %}">Software como Producto</a></li>
+{% endblock nav_items %}
+
+{% block content %}
+  <main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="{% url 'servicios' servicio.categoria.id %}">Servicios</a></li>
+          <li>{{servicio.categoria.abreviatura}}</li>
+        </ol>
+        <h2>{{servicio.nombre}}</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Portfolio Details Section ======= -->
+    <section id="portfolio-details" class="portfolio-details">
+      <div class="container">
+        <div class="row gy-4">
+
+          <div class="col-lg-8">
+            <div class="portfolio-details-slider swiper-container">
+              <div class="swiper-wrapper align-items-center">
+
+                {% if servicio.imagen %}
+                  <div class="swiper-slide">
+                    <img src="{{servicio.imagen.url}}" alt={{servicio.nombre}}>
+                  </div>
+                {% endif %}
+
+                {% if servicio.imagen2 %}
+                  <div class="swiper-slide">
+                    <img src="{{servicio.imagen2.url}}" alt={{servicio.nombre}}>
+                  </div>
+                {% endif %}
+
+                {% if servicio.imagen3 %}
+                  <div class="swiper-slide">
+                    <img src="{{servicio.imagen3.url}}" alt={{servicio.nombre}}>
+                  </div>
+                {% endif %}
+
+                {% if not servicio.imagen and not servicio.imagen2 and not servicio.imagen3 %}
+                  <img src="https://via.placeholder.com/1024" alt="Imagen no disponible.">
+                {% endif %}
+
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+
+            <div class="portfolio-info">
+              <h3>{{servicio.nombre}}</h3>
+              <ul>
+                <li>Puntuación promedio: <strong>{{servicio.puntos_promedio}}</strong></li>
+                <li>Votos: <strong>{{servicio.votos}}</strong></li>
+                <li>{{servicio.descripcion}}</li>
+              </ul>
+            </div>
+
+            <div class="portfolio-description">
+              <h2>Comentarios <i class="fas fa-comments"></i></h2>
+              <ul>
+                {% for comentario in comentarios %}
+                  <li><strong>{{ comentario.usuario }}:</strong> {{ comentario.texto }}<br></li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <button style="font-size: small;" class="btn btn-info" onclick="window.location.href='{% url 'opinion' servicio.id %}'">
+              Agregar Opinión
+              <img src="{% static 'app/svg/review.svg' %}" width="20" height="20" alt="Review">
+            </button>
+
+            <button style="font-size: small; float: right" class="btn btn-dark" onclick="window.location.href='{% url 'chatbot_service' servicio.id %}'">
+              Iniciar Solicitud
+              <img src="{% static 'app/svg/robot-wink-fill.svg' %}" width="20" height="20" alt="Review" style="filter: invert(100%);">
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+    </section><!-- End Portfolio Details Section -->
+
+  </main><!-- End #main -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock %}
+
+{% block links %}
+
+  <div class="col-lg-3 col-md-6 footer-contact">
+    <h3><i class="fa fa-building"></i> SOLUCIONES DTEAM</h3>
+    <p>
+      {{contacto.direccion}} <br><br>
+      <strong><i class="fa fa-mobile"></i> Teléfono móvil:</strong> {{contacto.telefono_movil}}<br>
+      <strong><i class="fa fa-phone"></i> Teléfono fijo:</strong> {{contacto.telefono_fijo}}<br>
+      <strong><i class="fa fa-envelope"></i> Email:</strong> {{contacto.correo}}<br>
+    </p>
+  </div>
+
+  <div class="col-lg-3 col-md-6 footer-links">
+    <h4>Enlaces Externos <i class="fa fa-external-link"></i></h4>
+    <ul>
+    {% for link in contacto.links_de_ayuda.all %}  
+      <li><a href={{link.link}}>{{link.nombre}}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+
+  <div class="col-lg-3 col-md-6 footer-links">
+    <h4>Redes Sociales <i class="fa fa-link"></i></h4>
+    <div class="social-links mt-3">
+    {% for red in contacto.redes_sociales.all %}
+      <a href={{red.link}} class="{{red.clase}}"><i class="bx bxl-{{red.clase}}"></i></a>
+    {% endfor %}
+    </div>
+  </div>
+
+{% endblock links %}
