@@ -1,0 +1,202 @@
+  body {
+    background-image: linear-gradient(to bottom, #4567b7, #2f4d6e, #1a2d3f);
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    font-family: ADLaM Display, Ubuntu !important;
+    font-weight: 400;
+  }
+  
+  #chat-container {
+    background-color: #fff;
+    margin: auto;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #chat-messages {
+    background-color: #ccc;
+    background-size: cover;
+    background-position: center;
+    padding: 10px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #chat-messages a {
+    color: #1a2d3f;
+  }
+  
+  #chat-form {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 10px;
+  }
+  
+  #msg {
+    width: 90%;
+  }
+  
+  #chat-form button[type="submit"] {
+    margin-right: 5px;
+    margin-left: 10px;
+    background-color: transparent;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: large;
+    outline: none;
+    box-shadow: none;
+  }
+  
+  #chat-header {
+    background-color: #333;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  #back {
+    margin-right: 20px;
+    margin-left: 5px;
+    font-size: 24px;
+  }
+
+  #chat-header img {
+    margin-right: 10px;
+    border-radius: 50%;
+  }
+  
+  #nombre-usuario {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #fff;
+  }
+  
+  #estado-usuario {
+    color: #007BFF;
+    font-size: 12px;
+    margin-top: 5px;
+    visibility: hidden;
+  }
+
+  #estado-usuario {
+    position: relative;
+  }
+  
+  #login-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  #login-button {
+    margin-right: 10px;
+    border: none;
+    padding: 0;
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  .user-sms {
+    background-color: rgba(47, 77, 110, 0.5);
+    border: 1px solid #2f4d6e;
+    color: #000;
+    padding: 10px;
+    margin-left: auto;
+    margin-bottom: 10px !important;
+    border-radius: 5px;
+    text-align: left;
+    max-width: 50%;
+  }
+
+  .bot-sms {
+    background-color: rgba(26, 45, 63, 0.5);
+    border: solid 1px #1a2d3f;
+    color: #000;
+    padding: 10px;
+    margin-right: auto;
+    margin-bottom: 10px !important;
+    border-radius: 5px;
+    text-align: left;
+    max-width: 50%;
+  }
+  
+  #chat-messages small {
+    margin-left: 10px;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #ccc;
+  }
+
+  #chat-form button:hover {
+    color: #007BFF;
+  }
+  
+  #clean-chat {
+    margin-right: 10px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+
+  #clean-chat:hover {
+    color: red;
+  }
+
+  #quick-replies {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    margin: 0 !important;
+    border-top: solid 1px #ccc;
+  }
+
+  #quick-replies button {
+    font-size: small;
+    margin: 5px;
+  }
+
+  @media (max-width: 768px) {
+    #chat-header {
+      padding: 5px;
+    }
+
+    #back {
+      margin-left: 10px;
+      font-size: 18px;
+    }
+
+    #nombre-usuario {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    #chat-header img {
+      width: 30px;
+      height: 30px;
+    }
+
+    #estado-usuario {
+      font-size: 9px;
+      margin-bottom: 0;
+    }
+
+    #login-container {
+      font-size: 16px;
+    }
+
+    #chat-messages small {
+      font-size: 10px;
+      margin-left: 10px;
+      margin-top: 5px;
+    }
+  }
