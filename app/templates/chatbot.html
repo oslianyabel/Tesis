@@ -44,7 +44,7 @@
       {% if mensajes %}
         {% for m in mensajes %}
           {% if m.enviado_por == "assistant" %}
-          <div class="mb-0 bot-sms"> {{m.texto}} <small> {{m.fecha_envio}} </small></div>
+          <div class="mb-0 bot-sms"> {{m.texto|safe}} <small> {{m.fecha_envio}} </small></div>
           {% endif %}
           
           {% if m.enviado_por == "user" %}
@@ -68,6 +68,11 @@
   
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var chatContainer = document.querySelector('#chat-messages');
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    });
+
     const estadoUsuario = document.getElementById('estado-usuario');
     let estado_usuario_text = "Escribiendo"
 

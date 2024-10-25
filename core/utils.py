@@ -43,7 +43,6 @@ def buscar_conversacion(usuario):
 
 def generar_respuesta_sin_historial(usuario, conv, user_msg):
     ans, ok = assistant.run_conversation(usuario, user_msg)
-    ans = ans[3:-4]
     print(f"- Bot: {ans}")
     if ok:
         print("Guardando mensajes en la base de datos.")
@@ -81,7 +80,6 @@ def generar_respuesta_con_historial(usuario, conv, user_msg, msg_list_obj):
         history.append(temp)
     
     ans, ok = assistant.run_conversation(usuario, user_msg, history)
-    ans = ans[3:-4]
     print(f"- Bot: {ans}")
     
     if ok:

@@ -17,7 +17,9 @@ def crear_generales(usuario, nombre_empresa, dir, mun, prov, email, tel, nombre,
             cargo=cargo
         )
         print("Generales actualizadas.")
+        
         return "Generales actualizadas."
+    
     except Exception as error:
         try:
             Generales.objects.create(
@@ -33,9 +35,12 @@ def crear_generales(usuario, nombre_empresa, dir, mun, prov, email, tel, nombre,
                 cargo=cargo
             )
             print("Generales creadas.")
+            
             return "Generales creadas."
+        
         except Exception as error:
             print(error)
+            
             return "Error creando las generales."
             
         
@@ -55,9 +60,12 @@ def get_generales_tool(usuario):
             "apellidos": generales.apellidos,
             "cargo": generales.cargo
         }
+        
         return json.dumps(ans)
+    
     except Exception as error:
         print(f"Usuario sin generales. {error}")
+        
         return "No hay generales asociadas al usuario."
     
     
@@ -93,8 +101,10 @@ def Energux(usuario, cantidad_usuarios: int, entidad_consolidadora: bool, entida
     
     try:
         energux = Servicio.objects.filter(nombre = "EnerguX")[0]
+        
     except Exception as error:
         print(f"No se encontró el servicio EnerguX. {error}")
+        
         return "No se encontró el servicio EnerguX."
     
     Solicitud.objects.create(
@@ -103,6 +113,7 @@ def Energux(usuario, cantidad_usuarios: int, entidad_consolidadora: bool, entida
         cuestionario = datos_json,
     )
     print("Solicitud de Energux creada!")
+    
     return "Solicitud enviada correctamente."
 
 
@@ -128,8 +139,10 @@ def Myros(usuario, cantidad_usuarios, cantidad_pc, entidad_consolidadora, moneda
     
     try:
         myros = Servicio.objects.filter(nombre = "MyRos")[0]
+        
     except Exception as error:
         print(f"No se encontró el servicio Myros. {error}")
+        
         return "No se encontró el servicio Myros."
     
     Solicitud.objects.create(
@@ -138,6 +151,7 @@ def Myros(usuario, cantidad_usuarios, cantidad_pc, entidad_consolidadora, moneda
         cuestionario = datos_json,
     )
     print("Solicitud de Myros creada!")
+    
     return "Solicitud enviada correctamente."
 
 
@@ -156,8 +170,10 @@ def Servidores(usuario, modo_conexion_red, nivel_conexion, cantidad_host_fisico,
     
     try:
         servidores = Servicio.objects.filter(nombre = "Servidores")[0]
+        
     except Exception as error:
         print(f"No se encontró el servicio Servidores. {error}")
+        
         return "No se encontró el servicio Servidores."
     
     Solicitud.objects.create(
@@ -166,6 +182,7 @@ def Servidores(usuario, modo_conexion_red, nivel_conexion, cantidad_host_fisico,
         cuestionario = datos_json,
     )
     print("Solicitud de Servidores creada!")
+    
     return "Solicitud enviada correctamente."
 
 
@@ -204,7 +221,8 @@ def clean_chat(usuario, sys_prompt):
         texto=sys_prompt,
         enviado_por="system"
     )
-    return "Conversación eliminada."
+    
+    return "Conversación eliminada. Pídele al usuario que actualice la página para no ver los mensajes anteriores."
 
 
 def redes_sociales():
@@ -215,6 +233,7 @@ def redes_sociales():
     ans += f"{chatbot.X} \n"
     ans += f"{chatbot.telegram} \n"
     ans += f"{chatbot.whatsapp} \n"
+    
     return ans
 
 
@@ -224,5 +243,6 @@ def info_contacto():
     ans += f"Correo de la empresa: {contacto.correo} \n"
     ans += f"Teléfono fijo de la empresa: {contacto.telefono_fijo} \n"
     ans += f"Teléfono móvil o celular de la empresa: {contacto.telefono_movil} \n"
+    
     return ans
     
