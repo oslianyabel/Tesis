@@ -151,6 +151,8 @@ class Catalogo(models.Model):
     action = models.ImageField(upload_to='imagenes/index')
     logo = models.ImageField(upload_to='imagenes/index', null=True, blank=True)
     fondo_chatbot = models.ImageField(upload_to='imagenes', null=True, blank=True)
+    fondo_login_pc = models.ImageField(upload_to='imagenes/login', null=True, blank=True)
+    fondo_login_mobile = models.ImageField(upload_to='imagenes/login', null=True, blank=True)
     
     def __str__(self):
         return self.nombre
@@ -216,3 +218,26 @@ class Cliente_Pot(models.Model):
     
     def __str__(self):
         return f"{self.usuario.username} -> {self.servicio.nombre}"
+    
+    
+class Opinion(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    puntuacion = models.IntegerField(null=True, blank=True)
+    
+    def __str__(self):
+        return self.usuario.username
+    
+    
+class Correos(models.Model):
+    correo1 = models.EmailField(null=True, blank=True)
+    correo2 = models.EmailField(null=True, blank=True)
+    correo3 = models.EmailField(null=True, blank=True)
+    correo4 = models.EmailField(null=True, blank=True)
+    correo5 = models.EmailField(null=True, blank=True)
+    correo6 = models.EmailField(null=True, blank=True)
+    correo7 = models.EmailField(null=True, blank=True)
+    correo8 = models.EmailField(null=True, blank=True)
+    correo9 = models.EmailField(null=True, blank=True)
+    correo10 = models.EmailField(null=True, blank=True)
+    activo = models.BooleanField(default=True)
+    

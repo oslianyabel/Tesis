@@ -1,5 +1,7 @@
 import json
+from core import utils
 from app.models import *
+
 
 def crear_generales(usuario, nombre_empresa, dir, mun, prov, email, tel, nombre, apellidos, cargo):
     try:
@@ -69,7 +71,7 @@ def get_generales_tool(usuario):
         return "No hay generales asociadas al usuario."
     
     
-def Energux(usuario, cantidad_usuarios: int, entidad_consolidadora: bool, entidad_subordinada: bool,
+def Energux(cantidad_usuarios: int, entidad_consolidadora: bool, entidad_subordinada: bool,
             monedas_trabajo: list[str], centros_costo: int, tarjetas_combustibles: int, equipos: int, 
             choferes: int, control_hojas_rutas: bool, plan_consumo_vehiculos: bool, modelo_portadores: str, 
             sistema_contable_automatizado: bool, sistema_contable_utilizado: str, portadores: str,
@@ -114,10 +116,16 @@ def Energux(usuario, cantidad_usuarios: int, entidad_consolidadora: bool, entida
     )
     print("Solicitud de Energux creada!")
     
+    try:
+        cuerpo = utils.preparar_email(datos, generales, "Energux")
+        utils.send_mail_list("Solicitud de Contrato", cuerpo)
+    except Exception as error:
+        print(f"Error notificando lista de correos: {error}")
+    
     return "Solicitud enviada correctamente."
 
 
-def Myros(usuario, cantidad_usuarios, cantidad_pc, entidad_consolidadora, monedas_trabajo,
+def Myros(cantidad_usuarios, cantidad_pc, entidad_consolidadora, monedas_trabajo,
           contratos_a_personas_naturales, registro_contratos_actualizado,
           registro_clientes_proveedores_actualizado, registro_productos_servicios,
           sistema_contable_versat, cuentas_gestion_contractual, generales):
@@ -152,11 +160,17 @@ def Myros(usuario, cantidad_usuarios, cantidad_pc, entidad_consolidadora, moneda
     )
     print("Solicitud de Myros creada!")
     
+    try:
+        cuerpo = utils.preparar_email(datos, generales, "Myros")
+        utils.send_mail_list("Solicitud de Contrato", cuerpo)
+    except Exception as error:
+        print(f"Error notificando lista de correos: {error}")
+    
     return "Solicitud enviada correctamente."
 
 
-def Servidores(usuario, modo_conexion_red, nivel_conexion, cantidad_host_fisico,
-                          cantidad_host_virtuales, servicios_a_instalar, ip_reservadas_dhcp, generales):
+def Servidores(modo_conexion_red, nivel_conexion, cantidad_host_fisico,cantidad_host_virtuales, 
+               servicios_a_instalar, ip_reservadas_dhcp, generales):
     
     datos = {
         "modo_conexion_red": modo_conexion_red,
@@ -182,6 +196,12 @@ def Servidores(usuario, modo_conexion_red, nivel_conexion, cantidad_host_fisico,
         cuestionario = datos_json,
     )
     print("Solicitud de Servidores creada!")
+    
+    try:
+        cuerpo = utils.preparar_email(datos, generales, "Servidores")
+        utils.send_mail_list("Solicitud de Contrato", cuerpo)
+    except Exception as error:
+        print(f"Error notificando lista de correos: {error}")
     
     return "Solicitud enviada correctamente."
 

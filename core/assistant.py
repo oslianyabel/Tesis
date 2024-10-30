@@ -512,14 +512,15 @@ def run_conversation(usuario, new_msg: str, messages=None):
                 elif function_name == "get_generales_tool":
                     function_response = tools.get_generales_tool(usuario)
                     
-                elif function_name in ["Energux", "Myros", "Servidores", "Fastos_Pagus"]:
+                elif function_name in ["Energux", "Myros", "Servidores"]:
                     try:
-                        # Consultar la herramienta get_generales_tool para comprobar si el usuario tiene generales asociadas.
                         generales = utils.get_generales(usuario)
                         if not generales:
                             print("Usuario sin generales.")
                             function_response = "Pedirle al usuario que reinicie chat y luego aporte sus generales."
-                        function_response = function_to_call(usuario=usuario, generales=generales, **function_args)
+                            
+                        function_response = function_to_call(generales=generales, **function_args)
+                        
                     except Exception as error:
                         print(error)
                         function_response = "Error al crear la solicitud."
@@ -540,6 +541,7 @@ def run_conversation(usuario, new_msg: str, messages=None):
                     }
                 )
                 print("Respuesta de la herramienta enviada al modelo.")
+                
             except Exception as error:
                 ok = False
                 print(f"Error al ejecutar la herramienta: {error}")

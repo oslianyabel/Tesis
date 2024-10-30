@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -8,6 +7,7 @@ from django.http import Http404
 from .forms import *
 from .models import *
 from core import utils
+
 
 def index(request):
     sn = SobreNosotros.objects.filter(activo=True)[0]
@@ -88,9 +88,11 @@ def login_opinion(request, service_id):
     else:
         form = AuthenticationForm()
     
+    catalogo = Catalogo.objects.filter(activo=True)[0]
     context = {
         "form": form,
-        "service_id": service_id
+        "service_id": service_id,
+        "catalogo": catalogo
     }
     return render(request, 'accounts/login_opinion.html', context)
 
@@ -108,9 +110,11 @@ def register_opinion(request, service_id):
     else:
         form = UserCreationForm()
 
+    catalogo = Catalogo.objects.filter(activo=True)[0]
     context = {
         "form": form,
-        "service_id": service_id
+        "service_id": service_id,
+        "catalogo": catalogo
     }
     return render(request, 'accounts/register_opinion.html', context)
 
@@ -130,8 +134,10 @@ def login_chatbot(request):
     else:
         form = AuthenticationForm()
     
+    catalogo = Catalogo.objects.filter(activo=True)[0]
     context = {
         "form": form,
+        "catalogo": catalogo
     }
     return render(request, 'accounts/login_chatbot.html', context)
 
@@ -149,8 +155,10 @@ def register_chatbot(request):
     else:
         form = UserCreationForm()
 
+    catalogo = Catalogo.objects.filter(activo=True)[0]
     context = {
         "form": form,
+        "catalogo": catalogo
     }
     return render(request, 'accounts/register_chatbot.html', context)
 
@@ -170,6 +178,29 @@ def opinion(request, service_id):
         if form.is_valid():
             comentario = form.cleaned_data['comentario']
             puntuacion = int(form.cleaned_data['puntuacion'])
+            if Opinion.objects.filter(usuario=request.user).exists():
+                opinion = Opinion.objects.get(usuario=request.user)
+                total_puntos = servicio.puntos_promedio * servicio.votos
+                total_puntos -= opinion.puntuacion
+                total_puntos += puntuacion
+                
+                servicio.puntos_promedio = total_puntos / servicio.votos
+                opinion.puntuacion = puntuacion
+                
+                opinion.save()
+                servicio.save()
+            else:
+                Opinion.objects.create(
+                    usuario=request.user,
+                    puntuacion=puntuacion,
+                )
+                total_votos = servicio.votos + 1
+                total_puntos = (servicio.puntos_promedio * servicio.votos) + puntuacion
+                
+                servicio.puntos_promedio = total_puntos / total_votos
+                servicio.votos = total_votos
+                servicio.save()
+                
             if comentario != "":
                 Comentario.objects.create(
                     usuario=request.user,
@@ -177,11 +208,6 @@ def opinion(request, service_id):
                     servicio=servicio
                 )
 
-            total_votos = servicio.votos + 1
-            total_puntos = servicio.puntos_promedio * servicio.votos + puntuacion
-            servicio.puntos_promedio = total_puntos / total_votos
-            servicio.votos = total_votos
-            servicio.save()
             return redirect(reverse('servicio-detail', args=[service_id]))
         else:
             for field, errors in form.errors.items():
@@ -219,7 +245,7 @@ def chatbot(request):
 def chatbot_service(request, service_id):
     if request.method == 'POST':
         return utils.generar_respuesta(request)
-        
+    
     try:
         servicio = Servicio.objects.get(id = service_id)
     except Exception as error:
@@ -227,9 +253,15 @@ def chatbot_service(request, service_id):
         return redirect(reverse('chatbot'))
     
     catalogo = Catalogo.objects.filter(activo=True)[0]
-    conv = Conversacion.objects.filter(usuario = request.user)[0]
-    mensajes = Mensaje.objects.filter(conversacion = conv).order_by("fecha_envio")
+    mensajes = None
     
+    if request.user.is_authenticated:
+        try:
+            conv = Conversacion.objects.filter(usuario = request.user)[0]
+            mensajes = Mensaje.objects.filter(conversacion = conv).order_by("fecha_envio")
+        except Exception as error:
+            mensajes = None
+        
     context = {
         "catalogo": catalogo,
         "mensajes": mensajes,

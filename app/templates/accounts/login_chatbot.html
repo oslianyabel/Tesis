@@ -9,12 +9,23 @@
     <style>
         body {
             background-color: #1a2d3f;
+            background-image: url({{catalogo.fondo_login_pc.url}});
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
+        @media only screen and (max-width: 768px) {
+            body {
+                background-image: url({{ catalogo.fondo_login_mobile.url }});
+            }
+        }
+        
         .container {
             margin-top: 100px;
             max-width: 400px;
-            background-color: #2f4d6e;
+            background-color: rgba(47, 77, 110, 0.8);
             padding: 30px;
             border-radius: 10px;
             color: #fff;
