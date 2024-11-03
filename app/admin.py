@@ -84,6 +84,11 @@ class SkillResource(resources.ModelResource):
         model = Skill
         
         
+class PuntuacionResource(resources.ModelResource):
+    class Meta:
+        model = Puntuacion
+        
+        
 class PotencialidadResource(resources.ModelResource):
     class Meta:
         model = Potencialidad
@@ -124,6 +129,12 @@ class Cliente_PotAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 class PotencialidadAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('nombre', 'descripcion', 'activo')
     resource_class = PotencialidadResource
+    
+    
+@admin.register(Puntuacion)
+class PuntuacionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('servicio__nombre', 'puntuacion', 'fecha')
+    resource_class = PuntuacionResource
     
     
 @admin.register(Skill)

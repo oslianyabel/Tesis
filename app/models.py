@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 
 class SobreNosotros(models.Model):
-    parrafo = models.TextField()
+    parrafo = RichTextField()
     parrafo2 = models.TextField(null=True, blank=True)
     check1 = models.CharField(max_length=255, null=True, blank=True)
     check2 = models.CharField(max_length=255, null=True, blank=True)
@@ -16,7 +17,7 @@ class SobreNosotros(models.Model):
 
 class Potencialidad(models.Model):
     nombre = models.CharField(max_length=255)
-    descripcion = models.TextField()
+    descripcion = RichTextField()
     activo = models.BooleanField(default=True)
 
     def __str__(self):
@@ -35,7 +36,7 @@ class Skill(models.Model):
 class Categoria(models.Model):
     nombre = models.CharField(max_length=255)
     abreviatura = models.CharField(max_length=255)
-    descripcion = models.TextField()
+    descripcion = RichTextField()
     activo = models.BooleanField(default=True)
     clase = models.CharField(max_length=255, default='fas fa-cloud')
     
@@ -45,7 +46,7 @@ class Categoria(models.Model):
 
 class Servicio(models.Model):
     nombre = models.CharField(max_length=255)
-    descripcion = models.TextField()
+    descripcion = RichTextField()
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='imagenes/servicios', null=True, blank=True)
     imagen2 = models.ImageField(upload_to='imagenes/servicios', null=True, blank=True)
@@ -60,7 +61,7 @@ class Servicio(models.Model):
     
 class Comentario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    texto = models.TextField()
+    texto = RichTextField()
     fecha = models.DateField(auto_now_add=True)
     aprobado = models.BooleanField(default=False)
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
@@ -86,7 +87,7 @@ class Equipo(models.Model):
 
 class PreguntaFrecuente(models.Model):
     pregunta = models.CharField(max_length=255)
-    respuesta = models.TextField()
+    respuesta = RichTextField()
     activo = models.BooleanField(default=True)
 
     def __str__(self):
@@ -165,13 +166,13 @@ class ChatBot(models.Model):
     X = models.CharField(max_length=255, default='<a href="https://x.com/DesoftSsp" class="twitter">X <i class="bx bxl-twitter" target="_blank"></i></a>')
     telegram = models.CharField(max_length=255, default='<a href="https://t.me/clientesDesoftSSP" class="telegram" target="_blank">Telegram <i class="bx bxl-telegram"></i></a>')
     whatsapp = models.CharField(max_length=255, default='<a href="https://chat.whatsapp.com/GXwpDNRWs1F6NOM1Z2fzbc" target="_blank">Whatsapp <i class="bx bxl-whatsapp"></i></a></a>')
-    sys_prompt = models.TextField()
+    sys_prompt = RichTextField()
     generales_prompt = models.TextField(default="Almacena las generales de una empresa y las asocia al usuario para poder crear solicitudes de contratos.")
     cuestionarios_prompt = models.TextField(default="Entrega al usuario un enlace de descarga de un modelo de cuestionario para solicitar un servicio dado.")
-    energux_prompt = models.TextField()
-    myros_prompt = models.TextField()
-    servidores_prompt = models.TextField()
-    fastos_pagus_prompt = models.TextField()
+    energux_prompt = RichTextField()
+    myros_prompt = RichTextField()
+    servidores_prompt = RichTextField()
+    fastos_pagus_prompt = RichTextField()
     activo = models.BooleanField(default=False)
     
     def __str__(self):
@@ -202,10 +203,10 @@ class Solicitud(models.Model):
     ]
     generales = models.ForeignKey(Generales, on_delete=models.CASCADE)
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
-    cuestionario = models.TextField()
+    cuestionario = RichTextField()
     fecha = models.DateField(auto_now_add=True)
     estado = models.CharField(max_length=255, default = "pending", choices=ESTADO_CHOICES)
-    observaciones = models.TextField()
+    observaciones = RichTextField()
     
     def __str__(self):
         return f"{self.generales.usuario.username} -> {self.servicio.nombre} ({self.estado})"
@@ -220,9 +221,11 @@ class Cliente_Pot(models.Model):
         return f"{self.usuario.username} -> {self.servicio.nombre}"
     
     
-class Opinion(models.Model):
+class Puntuacion(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
     puntuacion = models.IntegerField(null=True, blank=True)
+    fecha = models.DateField(auto_now_add=True)
     
     def __str__(self):
         return self.usuario.username
