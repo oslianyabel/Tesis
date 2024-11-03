@@ -20,6 +20,18 @@ else:
         api_key=OPENAI_API_KEY
     )
     model = "gpt-4o-mini"
+    
+available_functions = {
+    "crear_generales": tools.crear_generales,
+    "get_generales_tool": tools.get_generales_tool,
+    "cuestionario": tools.cuestionario,
+    "Energux": tools.Energux,
+    "Myros": tools.Myros,
+    "Servidores": tools.Servidores,
+    "clean_chat": tools.clean_chat,
+    "redes_sociales": tools.redes_sociales,
+    "info_contacto": tools.info_contacto,
+}
 
 print("Cargando prompts de herramientas externas.")
 generales = ChatBot.objects.filter(activo = True)[0]
@@ -436,8 +448,15 @@ def run_conversation2(new_msg: str):
     else:
         return "El usuario debe autenticarse para realizar esta acción.", False
     
-    
-def run_conversation(usuario, new_msg: str, messages=None):
+
+""" 
+ * Genera la próxima respuesta del chatbot en una conversación
+ * @param {django.contrib.auth.models.User} usuario - Usuario que está realizando la consulta
+ * @param {str} new_msg - Nuevo mensaje del usuario
+ * @param {List<dict>} messages - Lista de mensajes de la conversación actual
+ * @returns {(str, bool)} - Tupla con la respuesta del chatbot y una bandera indicando si la operación fue exitosa
+ """
+def run_conversation(usuario, new_msg, messages=None):
     if not messages:
         print("Chat sin mensajes.")
         sys_prompt = get_sys_prompt()
@@ -473,18 +492,8 @@ def run_conversation(usuario, new_msg: str, messages=None):
     else:
         ok = True
         print("Llamada a herramenta.")
-        available_functions = {
-            "crear_generales": tools.crear_generales,
-            "get_generales_tool": tools.get_generales_tool,
-            "cuestionario": tools.cuestionario,
-            "Energux": tools.Energux,
-            "Myros": tools.Myros,
-            "Servidores": tools.Servidores,
-            "clean_chat": tools.clean_chat,
-            "redes_sociales": tools.redes_sociales,
-            "info_contacto": tools.info_contacto,
-        }
         messages.append(response_message)
+        
         for tool_call in tool_calls:
             try:
                 function_name = tool_call.function.name
@@ -553,13 +562,19 @@ def run_conversation(usuario, new_msg: str, messages=None):
                         "content": "Error al ejecutar la herramienta.",
                     }
                 )
-        second_response = client.chat.completions.create(
-            model=model,
-            messages=messages,
-            tools=tools_,
-        )
-        print("Respuesta del modelo generada.")
-        return second_response.choices[0].message.content, ok
+                
+        try:
+            second_response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                tools=tools_,
+            )
+            print("Respuesta del modelo generada.")
+            return second_response.choices[0].message.content, ok
+        
+        except Exception as error:
+            print(error)
+            return "Lo sentimos, ha ocurrido un error, realice la consulta más tarde.", False
 
 
 if __name__ == "__main__":
