@@ -179,7 +179,7 @@ def opinion(request, service_id):
             comentario = form.cleaned_data['comentario']
             puntuacion = int(form.cleaned_data['puntuacion'])
             if Puntuacion.objects.filter(usuario=request.user, servicio=servicio).exists():
-                opinion = Puntuacion.objects.get(usuario=request.user)
+                opinion = Puntuacion.objects.get(usuario=request.user, servicio=servicio)
                 total_puntos = servicio.puntos_promedio * servicio.votos
                 total_puntos -= opinion.puntuacion
                 total_puntos += puntuacion

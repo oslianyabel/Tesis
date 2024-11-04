@@ -4,3 +4,4 @@ core/.env
 notas.txt
 servicios.json
 create_services.py
+staticfiles/
