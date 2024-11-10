@@ -1,9 +1,9 @@
 venv/
 __pycache__/
-core/.env
 notas.txt
 servicios.json
 data.json
 create_services.py
 staticfiles/
 export.sql
+.env
