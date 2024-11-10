@@ -34,13 +34,13 @@ available_functions = {
 }
 
 print("Cargando prompts de herramientas externas.")
-chatbot = ChatBot.objects.filter(activo = True)[0]
-generales_prompt = chatbot.generales_prompt
-cuestionarios_prompt = chatbot.cuestionarios_prompt
-energux_prompt = chatbot.energux_prompt
-myros_prompt = chatbot.myros_prompt
-servidores_prompt = chatbot.servidores_prompt
-fastos_pagus_prompt = chatbot.fastos_pagus_prompt
+#chatbot = ChatBot.objects.filter(activo = True)[0]
+generales_prompt = "chatbot.generales_prompt"
+cuestionarios_prompt = "chatbot.cuestionarios_prompt"
+energux_prompt = "chatbot.energux_prompt"
+myros_prompt = "chatbot.myros_prompt"
+servidores_prompt = "chatbot.servidores_prompt"
+fastos_pagus_prompt = "chatbot.fastos_pagus_prompt"
 
 print(f"generales_prompt: {generales_prompt}")
 print(f"cuestionarios_prompt: {cuestionarios_prompt}")
