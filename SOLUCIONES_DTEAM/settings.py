@@ -12,9 +12,9 @@ ENVIRONMENT_NAME = os.getenv('ENVIRONMENT_NAME')
 DEBUG = ENVIRONMENT_NAME == 'development'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-RENDER_HOSTNAME = os.getenv('RENDER_HOSTNAME')
-if RENDER_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_HOSTNAME)
+DOMAIN = os.getenv('DOMAIN')
+if DOMAIN:
+    ALLOWED_HOSTS.append(DOMAIN)
 
 INSTALLED_APPS = [
     'admin_interface',
@@ -78,14 +78,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'SOLUCIONES_DTEAM.wsgi.application'
 
 
-""" DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-} """
+}
 
-DB_NAME = os.getenv('DATABASE_NAME')
+""" DB_NAME = os.getenv('DATABASE_NAME')
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
@@ -100,7 +100,7 @@ DATABASES = {
         'HOST': DB_HOST,
         'PORT': DB_PORT,
     }
-}
+} """
 
 
 AUTH_PASSWORD_VALIDATORS = [
