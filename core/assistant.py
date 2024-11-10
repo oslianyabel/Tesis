@@ -33,14 +33,14 @@ available_functions = {
     "info_contacto": tools.info_contacto,
 }
 
-print("Cargando prompts de herramientas externas.")
-generales = ChatBot.objects.filter(activo = True)[0]
-generales_prompt = generales.generales_prompt
-cuestionarios_prompt = generales.cuestionarios_prompt
-energux_prompt = generales.energux_prompt
-myros_prompt = generales.myros_prompt
-servidores_prompt = generales.servidores_prompt
-fastos_pagus_prompt = generales.fastos_pagus_prompt
+""" print("Cargando prompts de herramientas externas.")
+chatbot = ChatBot.objects.filter(activo = True)[0]
+generales_prompt = chatbot.generales_prompt
+cuestionarios_prompt = chatbot.cuestionarios_prompt
+energux_prompt = chatbot.energux_prompt
+myros_prompt = chatbot.myros_prompt
+servidores_prompt = chatbot.servidores_prompt
+fastos_pagus_prompt = chatbot.fastos_pagus_prompt
 
 print(f"generales_prompt: {generales_prompt}")
 print(f"cuestionarios_prompt: {cuestionarios_prompt}")
@@ -48,14 +48,14 @@ print(f"energux_prompt: {energux_prompt}")
 print(f"myros_prompt: {myros_prompt}")
 print(f"servidores_prompt: {servidores_prompt}")
 print(f"fastos_pagus_prompt: {fastos_pagus_prompt}")
-print("="*150)
+print("="*150) """
 
 tools_con_generales = [
     {
         "type": "function",
         "function": {
             "name": "crear_generales",
-            "description": generales_prompt,
+            "description": "generales_prompt",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -125,7 +125,7 @@ tools_con_generales = [
         "type": "function",
         "function": {
             "name": "cuestionario",
-            "description": cuestionarios_prompt,
+            "description": "cuestionarios_prompt",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -149,7 +149,7 @@ tools_con_generales = [
         "type": "function",
         "function": {
             "name": "Energux",
-            "description": energux_prompt,
+            "description": "energux_prompt",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -181,7 +181,7 @@ tools_con_generales = [
         "type": "function",
         "function": {
             "name": "Myros",
-            "description": myros_prompt,
+            "description": "myros_prompt",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -258,7 +258,7 @@ tools_con_generales = [
         "type": "function",
         "function": {
             "name": "Servidores",
-            "description": servidores_prompt,
+            "description": "servidores_prompt",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -324,7 +324,7 @@ tools_sin_generales = [
         "type": "function",
         "function": {
             "name": "crear_generales",
-            "description": generales_prompt,
+            "description": "generales_prompt",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -380,7 +380,7 @@ tools_sin_generales = [
         "type": "function",
         "function": {
             "name": "cuestionario",
-            "description": cuestionarios_prompt,
+            "description": "cuestionarios_prompt",
             "parameters": {
                 "type": "object",
                 "properties": {

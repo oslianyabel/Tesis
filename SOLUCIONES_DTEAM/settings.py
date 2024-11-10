@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'core',
     'import_export',
     'colorfield',
-    'mod_wsgi.server',
 ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -104,10 +103,21 @@ WSGI_APPLICATION = 'SOLUCIONES_DTEAM.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+} """
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db_dteam',
+        'USER': 'postgres',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
