@@ -7,3 +7,4 @@ create_services.py
 staticfiles/
 export.sql
 .env
+test_assistant.py

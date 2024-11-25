@@ -9,17 +9,12 @@ load_dotenv()
 AVANGENIO_API_KEY = os.getenv('AVANGENIO_API_KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 ENVIRONMENT = os.getenv('ENVIRONMENT')
-if ENVIRONMENT == "prod":
-    client = OpenAI(
-        base_url="https://apigateway.avangenio.net",
-        api_key=AVANGENIO_API_KEY
-    )
-    model = "radiance"
-else:
-    client = OpenAI(
-        api_key=OPENAI_API_KEY
-    )
-    model = "gpt-4o-mini"
+
+client = OpenAI(
+    base_url="https://apigateway.avangenio.net",
+    api_key=AVANGENIO_API_KEY
+)
+model = "radiance"
     
 available_functions = {
     "crear_generales": tools.crear_generales,
@@ -81,7 +76,6 @@ def run_conversation2(new_msg: str):
     
 
 def get_tools(generales = False):
-    print("Cargando prompts de herramientas externas.")
     chatbot = ChatBot.objects.filter(activo = True)[0]
     generales_prompt = chatbot.generales_prompt
     cuestionarios_prompt = chatbot.cuestionarios_prompt
@@ -89,14 +83,6 @@ def get_tools(generales = False):
     myros_prompt = chatbot.myros_prompt
     servidores_prompt = chatbot.servidores_prompt
     fastos_pagus_prompt = chatbot.fastos_pagus_prompt
-
-    print(f"generales_prompt: {generales_prompt}")
-    print(f"cuestionarios_prompt: {cuestionarios_prompt}")
-    print(f"energux_prompt: {energux_prompt}")
-    print(f"myros_prompt: {myros_prompt}")
-    print(f"servidores_prompt: {servidores_prompt}")
-    print(f"fastos_pagus_prompt: {fastos_pagus_prompt}")
-    print("="*150)
 
     tools_con_generales = [
         {
@@ -153,6 +139,11 @@ def get_tools(generales = False):
             "function": {
                 "name": "get_generales_tool",
                 "description": "Consulta las generales asociadas a un usuario.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                },
             },
         },
         {
@@ -160,6 +151,11 @@ def get_tools(generales = False):
             "function": {
                 "name": "redes_sociales",
                 "description": "Consulta las redes sociales de la empresa.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                },
             },
         },
         {
@@ -167,6 +163,11 @@ def get_tools(generales = False):
             "function": {
                 "name": "info_contacto",
                 "description": "Consulta la información de contacto de la empresa.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                },
             },
         },
         {
@@ -191,6 +192,11 @@ def get_tools(generales = False):
             "function": {
                 "name": "clean_chat",
                 "description": "Borra la conversación actual. Se limpia el chat.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                },
             },
         },
         {
@@ -422,6 +428,11 @@ def get_tools(generales = False):
             "function": {
                 "name": "get_generales_tool",
                 "description": "Consulta las generales asociadas a un usuario.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                },
             },
         },
         {
@@ -446,6 +457,11 @@ def get_tools(generales = False):
             "function": {
                 "name": "clean_chat",
                 "description": "Borra la conversación actual. Se limpia el chat.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                },
             },
         }
     ]
