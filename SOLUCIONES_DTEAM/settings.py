@@ -48,7 +48,6 @@ JAZZMIN_SETTINGS = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -78,14 +77,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'SOLUCIONES_DTEAM.wsgi.application'
 
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+} """
 
-""" DB_NAME = os.getenv('DATABASE_NAME')
+DB_NAME = os.getenv('DATABASE_NAME')
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
@@ -100,7 +99,7 @@ DATABASES = {
         'HOST': DB_HOST,
         'PORT': DB_PORT,
     }
-} """
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -130,7 +129,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

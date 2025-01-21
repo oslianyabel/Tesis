@@ -1,4 +1,6 @@
-venv/
+venv312/
+venv310/
+media/
 __pycache__/
 notas.txt
 servicios.json

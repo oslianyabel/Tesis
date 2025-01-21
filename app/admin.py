@@ -133,7 +133,7 @@ class PotencialidadAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     
 @admin.register(Puntuacion)
 class PuntuacionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('servicio__nombre', 'puntuacion', 'fecha')
+    list_display = ('puntuacion', 'fecha')
     resource_class = PuntuacionResource
     
     

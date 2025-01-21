@@ -1,11 +1,13 @@
+from datetime import datetime
 import json
-from core import utils
+from core.utils import preparar_email, send_mail_list
 from app.models import *
 
 
 def crear_generales(usuario, nombre_empresa, dir, mun, prov, email, tel, nombre, apellidos, cargo):
     try:
         generales = Generales.objects.get(usuario = usuario)
+
         Generales.objects.update(
             usuario=usuario,
             nombre_empresa=nombre_empresa,
@@ -18,9 +20,9 @@ def crear_generales(usuario, nombre_empresa, dir, mun, prov, email, tel, nombre,
             apellidos=apellidos,
             cargo=cargo
         )
-        print("Generales actualizadas.")
+        print("Generales actualizadas")
         
-        return "Generales actualizadas."
+        return "Generales actualizadas"
     
     except Exception as error:
         try:
@@ -117,8 +119,8 @@ def Energux(cantidad_usuarios: int, entidad_consolidadora: bool, entidad_subordi
     print("Solicitud de Energux creada!")
     
     try:
-        cuerpo = utils.preparar_email(datos, generales, "Energux")
-        utils.send_mail_list("Solicitud de Contrato", cuerpo)
+        cuerpo = preparar_email(datos, generales, "Energux")
+        send_mail_list("Solicitud de Contrato", cuerpo)
     except Exception as error:
         print(f"Error notificando lista de correos: {error}")
     
@@ -153,7 +155,7 @@ def Myros(cantidad_usuarios, cantidad_pc, entidad_consolidadora, monedas_trabajo
         
         return "No se encontró el servicio Myros."
     
-    Solicitud.objects.create(
+    Solicitud.objects.create (
         generales = generales,
         servicio = myros,
         cuestionario = datos_json,
@@ -161,8 +163,8 @@ def Myros(cantidad_usuarios, cantidad_pc, entidad_consolidadora, monedas_trabajo
     print("Solicitud de Myros creada!")
     
     try:
-        cuerpo = utils.preparar_email(datos, generales, "Myros")
-        utils.send_mail_list("Solicitud de Contrato", cuerpo)
+        cuerpo = preparar_email(datos, generales, "Myros")
+        send_mail_list("Solicitud de Contrato", cuerpo)
     except Exception as error:
         print(f"Error notificando lista de correos: {error}")
     
@@ -198,8 +200,8 @@ def Servidores(modo_conexion_red, nivel_conexion, cantidad_host_fisico,cantidad_
     print("Solicitud de Servidores creada!")
     
     try:
-        cuerpo = utils.preparar_email(datos, generales, "Servidores")
-        utils.send_mail_list("Solicitud de Contrato", cuerpo)
+        cuerpo = preparar_email(datos, generales, "Servidores")
+        send_mail_list("Solicitud de Contrato", cuerpo)
     except Exception as error:
         print(f"Error notificando lista de correos: {error}")
     
@@ -265,4 +267,3 @@ def info_contacto():
     ans += f"Teléfono móvil o celular de la empresa: {contacto.telefono_movil} \n"
     
     return ans
-    
