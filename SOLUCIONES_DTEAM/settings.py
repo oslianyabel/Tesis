@@ -8,8 +8,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-ENVIRONMENT_NAME = os.getenv('ENVIRONMENT_NAME')
-DEBUG = ENVIRONMENT_NAME == 'development'
+ENVIRONMENT = os.getenv('ENVIRONMENT')
+DEBUG = ENVIRONMENT == 'dev'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 DOMAIN = os.getenv('DOMAIN')
