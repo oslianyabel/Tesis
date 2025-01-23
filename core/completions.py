@@ -4,7 +4,7 @@ from colorama import Fore, init
 from datetime import datetime
 from pydantic import BaseModel
 import json, os
-from core import tools2, utils2
+from core import functions, utils
 
 load_dotenv()
 
@@ -106,7 +106,7 @@ class Completions:
                     print(function_args)
                     
                     if function_name in ["Energux", "Myros", "Servidores"]:
-                        generales = utils2.get_generales(user)
+                        generales = utils.get_generales(user)
 
                         if generales:
                             function_args['generales'] = generales
@@ -147,19 +147,19 @@ if __name__ == "__main__":
     ]
 
     available_functions = {
-        "crear_generales": tools2.crear_generales,
-        "get_generales_tool": tools2.get_generales_tool,
-        "cuestionario": tools2.cuestionario,
-        "Energux": tools2.Energux,
-        "Myros": tools2.Myros,
-        "Servidores": tools2.Servidores,
-        "clean_chat": tools2.clean_chat,
-        "redes_sociales": tools2.redes_sociales,
-        "info_contacto": tools2.info_contacto,
-        "get_datetime": tools2.get_datetime,
+        "crear_generales": functions.crear_generales,
+        "get_generales_tool": functions.get_generales_tool,
+        "cuestionario": functions.cuestionario,
+        "Energux": functions.Energux,
+        "Myros": functions.Myros,
+        "Servidores": functions.Servidores,
+        "clean_chat": functions.clean_chat,
+        "redes_sociales": functions.redes_sociales,
+        "info_contacto": functions.info_contacto,
+        "get_datetime": functions.get_datetime,
     }
 
-    tools = utils2.get_tools(True)
+    tools = utils.get_tools(True)
 
     bot = Completions(messages = messages, tools = tools, functions = available_functions)
     ans, tools_called = bot.submit_message("Hola", None)

@@ -9,7 +9,7 @@ from datetime import datetime
 from core.completions import Completions
 from .forms import *
 from .models import *
-from core import utils2
+from core import tools, utils
 
 init(autoreset = True)
 
@@ -284,31 +284,30 @@ def generar_respuesta(request):
     if not request.user.is_authenticated:
         ans, tools_calls = generar_respuesta_usuario_no_autenticado(user_msg)
         date_time = datetime.now().strftime("%I:%M:%S %p")
-        return JsonResponse({'text': ans, "status": tools_calls, "time": date_time})
+        return JsonResponse({'text': ans, "status": "success", "time": date_time})
         
-    conv = utils2.get_or_create_chat(request.user)
-    
-    msg_list_obj = Mensaje.objects.filter(conversacion = conv).order_by('fecha_envio')
+    conv = Conversacion.objects.filter(usuario = request.user)[0]
+    if conv:
+        msg_list_obj = Mensaje.objects.filter(conversacion = conv).order_by('fecha_envio')
 
-    if not msg_list_obj.exists():
-        ans, tools_calls = generar_respuesta_sin_historial(request.user, conv, user_msg)
-        date_time = datetime.now().strftime("%I:%M:%S %p")
-        return JsonResponse({'text': ans, "status": tools_calls, "time": date_time})
-    
-    else:
-        ans, tools_calls = generar_respuesta_con_historial(request.user, conv, user_msg, msg_list_obj)
-        date_time = datetime.now().strftime("%I:%M:%S %p")
-        return JsonResponse({'text': ans, "status": tools_calls, "time": date_time})
-    
+        if msg_list_obj.exists():
+            ans, tools_calls = generar_respuesta_con_historial(request.user, conv, user_msg, msg_list_obj)
+            date_time = datetime.now().strftime("%I:%M:%S %p")
+            return JsonResponse({'text': ans, "status": "success", "time": date_time})
 
+    ans, tools_calls = generar_respuesta_sin_historial(request.user, user_msg)
+    date_time = datetime.now().strftime("%I:%M:%S %p")
+    return JsonResponse({'text': ans, "status": "success", "time": date_time})
+            
+    
 def generar_respuesta_usuario_no_autenticado(user_msg):
     print(Fore.YELLOW + "Usuario no autenticado")
-    chat = [{"role": "system", "content": utils2.get_sys_prompt(user_msg)}]
+    chat = [{"role": "system", "content": utils.get_sys_prompt()}]
 
     bot = Completions (
         messages = chat, 
-        tools = utils2.get_tools(None), 
-        functions = utils2.get_functions()
+        tools = tools.get_tools(None), 
+        functions = utils.get_functions()
     )
     ans, tools_calls = bot.submit_message(message = user_msg, user = None)
 
@@ -316,16 +315,16 @@ def generar_respuesta_usuario_no_autenticado(user_msg):
     return ans, tools_calls
 
 
-def generar_respuesta_sin_historial(user, conv, user_msg):
-    sys_prompt = utils2.get_sys_prompt(user_msg)
+def generar_respuesta_sin_historial(user, user_msg):
+    print("Generando respuesta sin historial")
+    sys_prompt = utils.get_sys_prompt()
     chat = [{"role": "system", "content": sys_prompt}]
-    bot = Completions(messages = chat, tools = utils2.get_tools(user), functions = utils2.get_functions())
+    bot = Completions(messages = chat, tools = tools.get_tools(user), functions = utils.get_functions())
     ans, tools_calls = bot.submit_message(message = user_msg, user = None)
-
-    print(Fore.BLUE + "- Bot:", ans)
 
     if ans != "Ha ocurrido un error, por favor realice la consulta más tarde":
         print("Guardando mensajes en la base de datos...")
+        conv = Conversacion.objects.create(usuario = user)
         sys_prompt += f". El usuario se llama: {user}. Refiérete a él por ese nombre."
 
         Mensaje.objects.create (
@@ -344,13 +343,11 @@ def generar_respuesta_sin_historial(user, conv, user_msg):
             enviado_por="assistant"
         )
         
-    hora_actual = datetime.now().strftime("%I:%M:%S %p")
-    
-    return JsonResponse({'text': ans, "status": "success", "time": hora_actual})
+    return ans, tools_calls
 
 
 def generar_respuesta_con_historial(user, conv, user_msg, msg_list_obj):
-    print("Cargando historial")
+    print("Generando respuesta con historial")
     history = []
 
     for msg_obj in msg_list_obj:
@@ -360,7 +357,7 @@ def generar_respuesta_con_historial(user, conv, user_msg, msg_list_obj):
         }
         history.append(temp)
     
-    bot = Completions(messages = history, tools = utils2.get_tools(user), functions = utils2.get_functions())
+    bot = Completions(messages = history, tools = tools.get_tools(user), functions = utils.get_functions())
     ans, tools_calls = bot.submit_message(message = user_msg, user = user)
     print(f"- Bot: {ans}")
     
@@ -377,6 +374,4 @@ def generar_respuesta_con_historial(user, conv, user_msg, msg_list_obj):
             enviado_por="assistant"
         )
         
-    hora_actual = datetime.now().strftime("%I:%M:%S %p")
-    
-    return JsonResponse({'text': ans, "status": "success", "time": hora_actual})
+    return ans, tools_calls

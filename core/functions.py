@@ -2,13 +2,13 @@ from colorama import Fore, init
 import psycopg2
 from datetime import datetime
 import json
-from core import utils2
+from core import utils
 
 init(autoreset = True)
 
 
 def crear_generales(user, nombre_empresa, dir, mun, prov, email, tel, nombre, apellidos, cargo):
-    generales = utils2.get_generales(user)
+    generales = utils.get_generales(user)
     if not generales:
         try:
             with psycopg2.connect(dbname="postgres", user="postgres", password="ofs", host="localhost", port="5432") as conn:
@@ -41,7 +41,7 @@ def crear_generales(user, nombre_empresa, dir, mun, prov, email, tel, nombre, ap
 
 
 def get_generales_tool(user):
-    generales = utils2.get_generales(user)
+    generales = utils.get_generales(user)
     if not generales:
         return f"El usuario {user.username} no tiene generales asociadas"
         
@@ -100,7 +100,7 @@ def Energux(cantidad_usuarios: int, entidad_consolidadora: bool, entidad_subordi
     }
     datos_json = json.dumps(datos, indent=4)
 
-    energux = utils2.get_service("Energux")
+    energux = utils.get_service("Energux")
     if not energux:
         return "Error creando la solicitud. Por favor intente más tarde"
 
@@ -118,8 +118,8 @@ def Energux(cantidad_usuarios: int, entidad_consolidadora: bool, entidad_subordi
         return "Error creando solicitud de Energux"
     
     try:
-        cuerpo = utils2.preparar_email(datos, generales, "Energux", user)
-        utils2.send_email_list("Solicitud de Energux", cuerpo)
+        cuerpo = utils.preparar_email(datos, generales, "Energux", user)
+        utils.send_email_list("Solicitud de Energux", cuerpo)
         
     except Exception as exc:
         print(Fore.RED + f"Error notificando lista de correos: {exc}")
@@ -153,7 +153,7 @@ def Myros(cantidad_usuarios, cantidad_pc, entidad_consolidadora, monedas_trabajo
     
     datos_json = json.dumps(datos, indent=4)
     
-    myros = utils2.get_service("Myros")
+    myros = utils.get_service("Myros")
     if not myros:
         return "Error creando la solicitud. Por favor intente más tarde"
 
@@ -171,8 +171,8 @@ def Myros(cantidad_usuarios, cantidad_pc, entidad_consolidadora, monedas_trabajo
         return "Error creando solicitud de Myros"
     
     try:
-        cuerpo = utils2.preparar_email(datos, generales, "Myros", user)
-        utils2.send_email_list("Solicitud de Myros", cuerpo)
+        cuerpo = utils.preparar_email(datos, generales, "Myros", user)
+        utils.send_email_list("Solicitud de Myros", cuerpo)
         
     except Exception as exc:
         print(Fore.RED + f"Error notificando lista de correos: {exc}")
@@ -200,7 +200,7 @@ def Servidores(modo_conexion_red, nivel_conexion, cantidad_host_fisico,cantidad_
 
     datos_json = json.dumps(datos, indent=4)
     
-    servidores = utils2.get_service("Servidores")[0]
+    servidores = utils.get_service("Servidores")[0]
     if not servidores:
         return "Error creando la solicitud. Por favor intente más tarde"
     
@@ -218,8 +218,8 @@ def Servidores(modo_conexion_red, nivel_conexion, cantidad_host_fisico,cantidad_
         return "Error creando solicitud de Servidores"
         
     try:
-        cuerpo = utils2.preparar_email(datos, generales, "Servidores", user)
-        utils2.send_email_list("Solicitud de Servidores", cuerpo)
+        cuerpo = utils.preparar_email(datos, generales, "Servidores", user)
+        utils.send_email_list("Solicitud de Servidores", cuerpo)
         
     except Exception as exc:
         print(Fore.RED + f"Error notificando lista de correos: {exc}")
@@ -234,7 +234,7 @@ def cuestionario(service_name, user):
         print(Fore.YELLOW + msg)
         return msg
     
-    service = utils2.get_service(service_name)
+    service = utils.get_service(service_name)
 
     if not service:
         print(Fore.YELLOW + f"El servicio {service_name} no existe")
@@ -273,13 +273,13 @@ def clean_chat(user):
         print(Fore.YELLOW + msg)
         return msg
     try:
-        chat = utils2.pg_fetch("app_conversacion", ("id", user.id), fields="id")
+        chat = utils.pg_fetch("app_conversacion", ("id", user.id), fields="id")
 
         if not chat:
             return "La conversación no existe"
         
         chat_id = chat[0][0]
-        sys_prompt = utils2.get_sys_prompt()
+        sys_prompt = utils.get_sys_prompt()
         
         with psycopg2.connect(dbname="postgres", user="postgres", password="ofs", host="localhost", port="5432") as conn:
             with conn.cursor() as cur:
@@ -299,7 +299,7 @@ def clean_chat(user):
 
 def redes_sociales(user):
     # Fetch the first active ChatBot
-    chatbot_data = utils2.pg_fetch('app_chatbot', filter=('activo', True), fields='facebook, instagram, "X", telegram, whatsapp')
+    chatbot_data = utils.pg_fetch('app_chatbot', filter=('activo', True), fields='facebook, instagram, "X", telegram, whatsapp')
     
     if not chatbot_data:
         return "No active chatbots found"
@@ -317,7 +317,7 @@ def redes_sociales(user):
 
 def info_contacto(user):
     # Fetch the first active Contact
-    contacto_data = utils2.pg_fetch('app_contacto', ('activo', True), 'direccion, correo, telefono_fijo, telefono_movil')
+    contacto_data = utils.pg_fetch('app_contacto', ('activo', True), 'direccion, correo, telefono_fijo, telefono_movil')
     
     if not contacto_data:
         return "No active contacts found"

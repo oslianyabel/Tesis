@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from colorama import Fore, init
 import json, os
 from app.models import *
-from core import tools, utils
+from core import tools_old, utils_old
 
 load_dotenv()
 
@@ -19,15 +19,15 @@ client = OpenAI(
 model = "radiance"
     
 available_functions = {
-    "crear_generales": tools.crear_generales,
-    "get_generales_tool": tools.get_generales_tool,
-    "cuestionario": tools.cuestionario,
-    "Energux": tools.Energux,
-    "Myros": tools.Myros,
-    "Servidores": tools.Servidores,
-    "clean_chat": tools.clean_chat,
-    "redes_sociales": tools.redes_sociales,
-    "info_contacto": tools.info_contacto,
+    "crear_generales": tools_old.crear_generales,
+    "get_generales_tool": tools_old.get_generales_tool,
+    "cuestionario": tools_old.cuestionario,
+    "Energux": tools_old.Energux,
+    "Myros": tools_old.Myros,
+    "Servidores": tools_old.Servidores,
+    "clean_chat": tools_old.clean_chat,
+    "redes_sociales": tools_old.redes_sociales,
+    "info_contacto": tools_old.info_contacto,
 }
 
 
@@ -102,8 +102,8 @@ def run_conversation(usuario, new_msg, messages=None):
     else:
         messages.append({"role": "user", "content": new_msg})
         
-    generales = utils.get_generales(usuario)
-    tools_ = utils.get_tools(generales)
+    generales = utils_old.get_generales(usuario)
+    tools_ = utils_old.get_tools(generales)
         
     try:
         print("Generando respuesta del modelo...")
@@ -148,18 +148,18 @@ def run_conversation(usuario, new_msg, messages=None):
                         function_response = "El servicio no existe."
                         
                 elif function_name == "crear_generales":
-                    function_response = tools.crear_generales(usuario=usuario, **function_args)
+                    function_response = tools_old.crear_generales(usuario=usuario, **function_args)
                     
                 elif function_name == "clean_chat":
                     sys_prompt = get_sys_prompt()
-                    function_response = tools.clean_chat(usuario, sys_prompt)
+                    function_response = tools_old.clean_chat(usuario, sys_prompt)
                     
                 elif function_name == "get_generales_tool":
-                    function_response = tools.get_generales_tool(usuario)
+                    function_response = tools_old.get_generales_tool(usuario)
                     
                 elif function_name in ["Energux", "Myros", "Servidores"]:
                     try:
-                        generales = utils.get_generales(usuario)
+                        generales = utils_old.get_generales(usuario)
                         if not generales:
                             print(Fore.YELLOW + "Usuario sin generales")
                             function_response = "Pedirle al usuario que reinicie chat y luego aporte sus generales."
